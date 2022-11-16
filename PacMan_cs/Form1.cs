@@ -16,45 +16,45 @@ namespace PacMan_cs
 
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Up)
+            switch (e.KeyCode)
             {
-                goUp = true;
-            }
-            if (e.KeyCode == Keys.Down)
-            {
-                goDown = true;
-            }
-            if (e.KeyCode == Keys.Left)
-            {
-                goLeft = true;
-            }
-            if (e.KeyCode == Keys.Right)
-            {
-                goRight = true;
+                case Keys.Up:
+                    goUp = true;
+                    break;
+                case Keys.Down:
+                    goDown = true;
+                    break;
+                case Keys.Left:
+                    goLeft = true;
+                    break;
+                case Keys.Right:
+                    goRight = true;
+                    break;
             }
         }
 
         private void KeyIsUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Up)
+            switch (e.KeyCode)
             {
-                goUp = false;
-            }
-            if (e.KeyCode == Keys.Down)
-            {
-                goDown = false;
-            }
-            if (e.KeyCode == Keys.Left)
-            {
-                goLeft = false;
-            }
-            if (e.KeyCode == Keys.Right)
-            {
-                goRight = false;
-            }
-            if (e.KeyCode == Keys.Enter && isGameOver == true)
-            {
-                ResetGame();
+                case Keys.Up:
+                    goUp = false;
+                    break;
+                case Keys.Down:
+                    goDown = false;
+                    break;
+                case Keys.Left:
+                    goLeft = false;
+                    break;
+                case Keys.Right:
+                    goRight = false;
+                    break;
+                case Keys.Enter:
+                    if (isGameOver == true)
+                    {
+                        ResetGame();
+                    }
+                    break;
             }
         }
 
@@ -62,44 +62,15 @@ namespace PacMan_cs
         {
             txtScore.Text = "Score: " + score.ToString();
 
-            if (goLeft == true)
-            {
-                pacman.Left -= playerSpeed;
-                pacman.Image = Properties.Resources.left;
-            }
-            if (goRight == true)
-            {
-                pacman.Left += playerSpeed;
-                pacman.Image = Properties.Resources.right;
-            }
-            if (goDown == true)
-            {
-                pacman.Top += playerSpeed;
-                pacman.Image = Properties.Resources.down;
-            }
-            if (goUp == true)
-            {
-                pacman.Top -= playerSpeed;
-                pacman.Image = Properties.Resources.Up;
-            }
+            MoveLeft();
+            MoveRight();
+            MoveDown();
+            MoveUp();
 
-            if (pacman.Left < -10)
-            {
-                pacman.Left = 680;
-            }
-            if (pacman.Left > 680)
-            {
-                pacman.Left = -10;
-            }
-
-            if (pacman.Top < -10)
-            {
-                pacman.Top = 550;
-            }
-            if (pacman.Top > 550)
-            {
-                pacman.Top = 0;
-            }
+            MovingLeft();
+            MovingRight();
+            MovingTop();
+            MovingBottom();
 
             foreach (Control x in Controls)
             {
@@ -109,8 +80,7 @@ namespace PacMan_cs
                     {
                         if (pacman.Bounds.IntersectsWith(x.Bounds))
                         {
-                            score++;
-                            x.Visible = false;
+                            EatCoin(x as PictureBox);
                         }
                     }
 
@@ -211,6 +181,80 @@ namespace PacMan_cs
             gameTimer.Stop();
 
             txtScore.Text = "Score: " + score + Environment.NewLine + message;
+        }
+
+        void MoveLeft()
+        {
+            if (goLeft == true)
+            {
+                pacman.Left -= playerSpeed;
+                pacman.Image = Properties.Resources.left;
+            }
+        }
+
+        void MoveRight()
+        {
+            if (goRight == true)
+            {
+                pacman.Left += playerSpeed;
+                pacman.Image = Properties.Resources.right;
+            }
+        }
+
+        void MoveDown()
+        {
+            if (goDown == true)
+            {
+                pacman.Top += playerSpeed;
+                pacman.Image = Properties.Resources.down;
+            }
+        }
+
+        void MoveUp()
+        {
+            if (goUp == true)
+            {
+                pacman.Top -= playerSpeed;
+                pacman.Image = Properties.Resources.Up;
+            }
+        }
+
+        void MovingLeft()
+        {
+            if (pacman.Left < -10)
+            {
+                pacman.Left = 680;
+            }
+        }
+
+        void MovingRight()
+        {
+            if (pacman.Left > 680)
+            {
+                pacman.Left = -10;
+            }
+        }
+
+        void MovingTop()
+        {
+            if (pacman.Top < -10)
+            {
+                pacman.Top = 550;
+            }
+        }
+
+        void MovingBottom()
+        {
+            if (pacman.Top > 550)
+            {
+                pacman.Top = 0;
+            }
+        }
+
+        void EatCoin(PictureBox coin)
+        {
+            score++;
+            coin.Visible = false;
         }
     }
 }
